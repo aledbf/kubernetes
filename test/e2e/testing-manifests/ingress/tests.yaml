@@ -1,121 +1,50 @@
-tests: 
-  - name: "single ingress - default backend"
-    checks: 
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 404
-          body: "default backend 404"
-          headers: 
-            - content-type: "text/plain"
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          method: "GET"
-          url: "/index.html"
-        response: 
-          statusCode: 404
-          body: "default backend 404"
-          headers: 
-            - content-type: "text/plain"
-  - name: "single ingress - invalid service"
-    requirements: 
-      services: 
-        - file: "svc1.yaml"
-          name: "svc1"
-        - file: "svc2.yaml"
-          name: "svc2"
-      ingress: 
-        - file: "ing-0001.yaml"
-          name: "invalid-svc"      
-    checks: 
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          host: "foo.bar.com"
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 404
-          body: "default backend 404"
-          headers: 
-            - content-type: "text/plain"
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 404
-          body: "default backend 404"
-          headers: 
-            - content-type: "text/plain"
-  - name: "single tls"
-    requirements: 
-      services: 
-        - file: "svc1.yaml"
-          name: "svc1"
-      ingress: 
-        - file: "ing-0002.yaml"
-          name: "svc-with-tls"
-      ingressConfig:
-          useHts: true
-    checks:
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          host: "foo.bar.com"
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 301
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          host: "foo.bar.com"
-          https: true
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 200
-          body: "ok"
-          headers: 
-            - content-type: "text/plain"
-  - name: "single tls without forcing redirect to https"
-    requirements: 
-      services: 
-        - file: "svc1.yaml"
-          name: "svc1"
-      ingress: 
-        - file: "ing-0002.yaml"
-          name: "svc-with-tls"
-      ingressConfig:
-          useHts: false
-    checks:
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          host: "foo.bar.com"
-          https: false
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 200
-          body: "ok"
-          headers: 
-            - content-type: "text/plain"
-      - request: 
-          headers: 
-            - "content-type: text/plain"
-          host: "foo.bar.com"
-          https: true
-          method: "GET"
-          url: "/"
-        response: 
-          statusCode: 200
-          body: "ok"
-          headers: 
-            - content-type: "text/plain"
+- name: "single ingress - default backend"
+  checks: 
+    - request: 
+        headers: 
+          content-type: text/plain
+        method: "GET"
+        url: "/"
+      response: 
+        statusCode: 404
+        body: "default backend 404"
+        headers: 
+          content-type: 
+            - "text/plain"
+    - request: 
+        headers: 
+          content-type: text/plain
+        method: "GET"
+        url: "/index.html"
+      response: 
+        statusCode: 404
+        body: "default backend 404"
+        headers: 
+          content-type:
+            - "text/plain"
+###
+- name: "single ingress - default backend"
+  checks: 
+    - request: 
+        headers: 
+          content-type: text/plain
+        method: "GET"
+        url: "/"
+      response: 
+        statusCode: 404
+        body: "default backend 404"
+        headers: 
+          content-type:
+            - "text/plain"
+    - request: 
+        headers: 
+          content-type: text/plain
+        method: "GET"
+        url: "/index.html"
+      response: 
+        statusCode: 404
+        body: "default backend 404"
+        headers: 
+          content-type:
+            - "text/plain"
+

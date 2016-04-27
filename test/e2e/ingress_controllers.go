@@ -99,17 +99,17 @@ func getIngressControllers(repoRoot string, client *client.Client) []*nginxContr
 }
 
 // getTestCases returns a list of tests.
-func getTestCases(repoRoot string, client *client.Client) ([]*ingressTest, error) {
+func getTestCases(repoRoot string) ([]ingressTest, error) {
 	filename := filepath.Join(repoRoot, "test", "e2e", "testing-manifests", "ingress", "tests.yaml")
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, err
+		return []ingressTest{}, err
 	}
 
-	var tests []*ingressTest
+	var tests []ingressTest
 	err = yaml.Unmarshal(b, &tests)
 	if err != nil {
-		return nil, err
+		return []ingressTest{}, err
 	}
 
 	return tests, nil
@@ -199,7 +199,7 @@ var _ = framework.KubeDescribe("IngressController [Feature:IngressController]", 
 			By(fmt.Sprintf("Starting loadbalancer controller %v in namespace %v", t.getName(), ns))
 			Expect(t.start(ns)).NotTo(HaveOccurred())
 
-			tests, err := getTestCases(repoRoot, client)
+			tests, err := getTestCases(repoRoot)
 			Expect(err).NotTo(HaveOccurred())
 			for _, test := range tests {
 				By(fmt.Sprintf("Starting test %v in namespace %v", test.Name, ns))
