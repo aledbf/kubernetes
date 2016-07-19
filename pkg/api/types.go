@@ -1902,6 +1902,9 @@ type EndpointPort struct {
 	// The port number.
 	Port int32
 
+	// The name of the port (when TargetPort is a string).
+	NamedPort string
+
 	// The IP protocol for this port.
 	Protocol Protocol
 }
